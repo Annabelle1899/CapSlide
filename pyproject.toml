@@ -1,0 +1,2 @@
+[project.scripts]
+capslide = "capslide.cli:main"
