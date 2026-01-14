@@ -174,7 +174,36 @@ def test_subtitles_processor_text_file():
     assert slides_count == 3    
 
     
-    
-    #assert processor.get_placeholders_count(new_slide, placeholder) == 0
+def test_subtitles_processor_file1():
+    processor = SubtitlesProcessor(
+        output_path=get_output_file_path('dest6.pptx'),
+        template_path=default_template_path,
+        template_slide_page_number=6,
+        placeholder='subtitle',
+    )
+    assert processor is not None
 
+    file_path = get_data_file_path('sample2.txt')
     
+    matched_count, slides_count =  processor.append_slides_from_file(file_path)
+    processor.save()
+    assert matched_count == 6
+    assert slides_count == 3    
+
+
+def test_subtitles_processor_file2():
+    processor = SubtitlesProcessor(
+        output_path=get_output_file_path('dest7.pptx'),
+        template_path=default_template_path,
+        template_slide_page_number=7,
+        placeholder='subtitle',
+    )
+    assert processor is not None
+
+    file_path = get_data_file_path('sample1.json')
+    
+    matched_count, slides_count =  processor.append_slides_from_file(file_path)
+    processor.save()
+    assert matched_count == 15
+    assert slides_count == 3    
+

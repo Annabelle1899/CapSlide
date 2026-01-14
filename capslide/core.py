@@ -253,7 +253,40 @@ class SubtitlesProcessor:
             print(f'Added {slides_count} of {rows_count} slides successfully! Total subtitles added: {matched_count}.')
 
             return matched_count, slides_count
+
+    def append_slides_from_text_file(self, text_file_path):
+        """Read subtitles from a text file and add them to slides"""
+        text_file_path = self.merge_path(text_file_path, "data")
+        
+        if not os.path.exists(text_file_path):
+            raise Exception(f'Subtitle file {text_file_path} does not exist!')
+        
+        with open(text_file_path, 'r') as f:
+            content = f.readlines()
+            lines = [line.strip() for line in content if line.strip()] 
+            rows = []
+            for line in lines:
+                row = {self.placeholder: line}
+                rows.append(row)
+        
+            rows_count = len(rows)
+
+            matched_count, slides_count = self.append_slides_with_rows(rows)
             
+            print('*' * 40)
+            print(f'Added {slides_count} of {rows_count} slides successfully! Total subtitles added: {matched_count}.')
+
+            return matched_count, slides_count
+
+    def append_slides_from_file(self, file_path):
+        file_path = self.merge_path(file_path, "data")
+        if file_path.endswith(".json"):
+            return self.append_slides_from_json_file(file_path)
+        elif file_path.endswith(".txt"):
+            return self.append_slides_from_text_file(file_path)
+        else:
+            raise Exception(f"Unsupported subtitle file type: {file_path}")
+
     def save(self):
         # Remove the original template slide before saving
         self.remove_slide(self.template_slide_page_number)
